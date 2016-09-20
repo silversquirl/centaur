@@ -1,0 +1,8 @@
+;; vim: ft=scheme
+
+((author "Samadi van Koten")
+ (synopsis "A stupid-simple web framework")
+ (license "MIT")
+
+ (category web)
+ (needs spiffy))

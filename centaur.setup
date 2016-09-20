@@ -1,0 +1,5 @@
+;; vim: ft=scheme
+
+(standard-extension
+  'centaur
+  "0.0.0")
