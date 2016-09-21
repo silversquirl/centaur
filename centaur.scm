@@ -76,17 +76,19 @@
   ;; Render and respond with SXML
   (define (render sxml)
     (send-response
-     (with-output-to-string
-      (lambda _
-        (SRV:send-reply
-         (pre-post-order sxml universal-conversion-rules))))))
+     status: 'ok
+     body: (with-output-to-string
+            (lambda _
+              (SRV:send-reply
+               (pre-post-order sxml universal-conversion-rules))))))
 
   ;; Render and respond with JSON
   (define (render-json json)
     (send-response
-     (with-output-to-string
-      (lambda _
-        (json-write json)))))
+     status: 'ok
+     body: (with-output-to-string
+            (lambda _
+              (json-write json)))))
 
   ;;; Convenience
   (define port server-port)
