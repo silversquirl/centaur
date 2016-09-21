@@ -1,5 +1,8 @@
 (module centaur
     (router
+
+     port
+     host
      serve)
 
   (import chicken scheme)
