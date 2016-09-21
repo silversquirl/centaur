@@ -82,9 +82,9 @@
   ;; Render and respond with JSON
   (define (render-json json)
     (send-response
-      (with-output-to-string
-        (lambda _
-          (json-write json)))))
+     (with-output-to-string
+      (lambda _
+        (json-write json)))))
 
   ;;; Convenience
   (define port server-port)
