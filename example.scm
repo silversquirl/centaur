@@ -3,11 +3,11 @@
 (print "Starting...")
 (serve
  `((,(match-lambda
-       (()
+       (('GET)
         (send-response status: 'ok
                        body: "<h1>Hello, world!</h1>"))
 
-       ((name)
+       (('GET name)
         (send-response status: 'ok
                        body: (string-append
                               "<h1>Hello, "

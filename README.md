@@ -2,6 +2,9 @@
 
 A stupid-simple web framework for CHICKEN Scheme.
 
+**NOTE:** Centaur is in very early stages, and the API may change
+**without warning** at any point. Be careful when updating.
+
 ## What is Centaur?
 
 Centaur is similar-ish to [Sinatra], a minimal web framework for Ruby.

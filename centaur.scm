@@ -7,7 +7,8 @@
        uri-common
        intarweb
 
-       srfi-1)
+       srfi-1
+       srfi-13)
 
   (reexport spiffy)
 
@@ -31,11 +32,14 @@
   ;;; Routing
   (define ((router matchers) continue)
     ;; Get the URI and strip out unnecessary bits
-    (let ((uri (filter
-                (lambda (part)
-                  (not (or (eqv? part '/)
-                           (equal? part ""))))
-                (uri-path (request-uri (current-request))))))
+    (let* ((req (current-request))
+           (uri (filter-map
+                 (lambda (part)
+                   (and (not (or (eqv? part '/)
+                                 (equal? part "")))
+                        (string-downcase part)))
+                 (uri-path (request-uri req))))
+           (method (request-method req)))
       (call/cc
        (lambda (matched)
          ;; Loop through and run each matcher
@@ -47,7 +51,8 @@
                     (remove-prefix uri (cdr reversed-matcher))))
               (when unprefixed-uri
                 ;; Store the return value
-                (let ((rv ((car reversed-matcher) unprefixed-uri)))
+                (let ((rv ((car reversed-matcher)
+                           (cons method unprefixed-uri))))
                   ;; If we've responded, break out of the loop
                   (when (response? rv)
                     (matched rv))))))
