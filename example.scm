@@ -2,8 +2,7 @@
 
 (print "Starting...")
 (serve
- `((/
-    ,(match-lambda
+ `((,(match-lambda
        (()
         (send-response status: 'ok
                        body: "<h1>Hello, world!</h1>"))

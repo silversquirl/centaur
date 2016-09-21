@@ -41,11 +41,11 @@
          ;; Loop through and run each matcher
          (for-each
           (lambda (matcher)
-            (let ((reversed-matcher (reverse matcher))
-                  ;; The unprefixed URI
-                  (unprefixed-uri
-                   (remove-prefix uri (cdr reversed-matcher))))
-              (when (unprefixed-uri)
+            (let* ((reversed-matcher (reverse matcher))
+                   ;; The unprefixed URI
+                   (unprefixed-uri
+                    (remove-prefix uri (cdr reversed-matcher))))
+              (when unprefixed-uri
                 ;; Store the return value
                 (let ((rv ((car reversed-matcher) unprefixed-uri)))
                   ;; If we've responded, break out of the loop
@@ -61,6 +61,6 @@
   (define host (make-parameter ".*"))
 
   (define (serve matchers)
-    (vhost-map (list (cons host (router matchers))))
+    (vhost-map (list (cons (host) (router matchers))))
     (start-server)))
 
