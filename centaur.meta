@@ -5,4 +5,6 @@
  (license "MIT")
  (category web)
 
- (needs spiffy sxml-transforms))
+ (needs spiffy
+        sxml-transforms
+        json))

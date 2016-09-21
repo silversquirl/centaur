@@ -13,6 +13,7 @@
        intarweb
 
        sxml-transforms
+       json
        ports
 
        srfi-1
@@ -77,6 +78,13 @@
       (lambda _
         (SRV:send-reply
          (pre-post-order sxml universal-conversion-rules))))))
+
+  ;; Render and respond with JSON
+  (define (render-json json)
+    (send-response
+      (with-output-to-string
+        (lambda _
+          (json-write json)))))
 
   ;;; Convenience
   (define port server-port)
