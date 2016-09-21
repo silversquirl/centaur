@@ -1,6 +1,8 @@
 (module centaur
     (router
 
+     render
+
      port
      host
      serve)
@@ -9,6 +11,9 @@
   (use spiffy
        uri-common
        intarweb
+
+       sxml-transforms
+       ports
 
        srfi-1
        srfi-13)
@@ -63,6 +68,15 @@
 
          ;; We've not exited yet, so it's not been matched
          (continue)))))
+
+  ;;; Rendering
+  ;; Render and respond with SXML
+  (define (render sxml)
+    (send-response
+     (with-output-to-string
+      (lambda _
+        (SRV:send-reply
+         (pre-post-order sxml universal-conversion-rules))))))
 
   ;;; Convenience
   (define port server-port)

@@ -5,4 +5,4 @@
  (license "MIT")
  (category web)
 
- (needs spiffy))
+ (needs spiffy sxml-transforms))
