@@ -2,6 +2,7 @@
     (router
 
      render
+     render-json
 
      port
      host
@@ -57,7 +58,8 @@
             (let* ((reversed-matcher (reverse matcher))
                    ;; The unprefixed URI
                    (unprefixed-uri
-                    (remove-prefix uri (cdr reversed-matcher))))
+                    (remove-prefix uri
+                                   (reverse (cdr reversed-matcher)))))
               (when unprefixed-uri
                 ;; Store the return value
                 (let ((rv ((car reversed-matcher)
