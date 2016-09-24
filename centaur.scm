@@ -1,8 +1,11 @@
 (module centaur
     (router
 
-     render
-     render-json
+     respond
+     respond-sxml
+     respond-json
+
+     request-body
 
      port
      host
@@ -17,6 +20,7 @@
        json
        ports
 
+       extras
        srfi-1
        srfi-13)
 
@@ -72,25 +76,38 @@
          ;; We've not exited yet, so it's not been matched
          (continue)))))
 
-  ;;; Rendering
-  ;; Render and respond with SXML
-  (define (render sxml)
-    (send-response
-     status: 'ok
-     body: (with-output-to-string
-            (lambda _
-              (SRV:send-reply
-               (pre-post-order sxml universal-conversion-rules))))))
+  ;;; Responding
+  ;; Tiny wrapper
+  (define (respond body #!optional status)
+    (send-response status: status
+                   body: body))
 
-  ;; Render and respond with JSON
-  (define (render-json json)
-    (send-response
-     status: 'ok
-     body: (with-output-to-string
-            (lambda _
-              (json-write json)))))
+  ;; Render and respond with SXML
+  (define (respond-sxml sxml)
+    (respond
+     (with-output-to-string
+      (lambda _
+        (SRV:send-reply
+         (pre-post-order sxml universal-conversion-rules))))))
+
+  ;; Generate and respond with JSON
+  (define (respond-json json)
+    (respond
+     (with-output-to-string
+      (lambda _
+        (json-write json)))))
 
   ;;; Convenience
+  ;; Getting the request body
+  (define (request-body req)
+    (let ((content-length (header-value 'content-length
+                                        (request-headers req))))
+      (cond
+        ((not content-length) (error "content-length not set"))
+        ((zero? content-length) "")
+        (else (read-string content-length (request-port req))))))
+
+  ;; Setting up and starting the server
   (define port server-port)
   (define host (make-parameter ".*"))
 
